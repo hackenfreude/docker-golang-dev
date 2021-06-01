@@ -1,6 +1,5 @@
 FROM hackenfreude/devenv:latest
 
-
 ##### golang #####
 ENV GOLANG_VERSION 1.9.2
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
@@ -16,6 +15,9 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
+RUN echo "set encoding=UTF-8" > ~/.vimrcnew && cat ~/.vimrc >> ~/.vimrcnew && mv ~/.vimrcnew ~/.vimrc
+
+RUN grep -v "syntax on" ~/.vimrc > ~/.vimrcnew && mv ~/.vimrcnew ~/.vimrc
 
 ##### vim #####
 COPY ./vimrc.addition /root/vimrc.addition
@@ -25,8 +27,8 @@ RUN rm /root/vimrc.addition
 RUN mv /root/vimrc.new /root/.vimrc
 
 RUN vim -c "PlugInstall" -c "qa"
-RUN vim -c "GoInstallBinaries" -c "qa"
+#RUN vim -c "GoInstallBinaries" -c "qa"
 
 
 ##### youcompleteme #####
-RUN cd /root/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/gocode && go build
+#RUN cd /root/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/gocode && go build
